@@ -135,11 +135,14 @@ for (let i = 0; i < galleryCount; i++) {
       this.total = this.slides.length;
 
       this.lightbox = el.querySelector("[data-lightbox]");
-      this.lbImgs = this.lightbox ? [...this.lightbox.querySelectorAll("[data-lb-img]")] : [];
-      this.lbDots = this.lightbox ? [...this.lightbox.querySelectorAll("[data-lb-dot]")] : [];
-      this.lbPrev = this.lightbox ? this.lightbox.querySelector("[data-lb-prev]") : null;
-      this.lbNext = this.lightbox ? this.lightbox.querySelector("[data-lb-next]") : null;
-      this.lbClose = this.lightbox ? this.lightbox.querySelector("[data-close]") : null;
+      if (this.lightbox) {
+        document.body.appendChild(this.lightbox);
+        this.lbImgs = [...this.lightbox.querySelectorAll("[data-lb-img]")];
+        this.lbDots = [...this.lightbox.querySelectorAll("[data-lb-dot]")];
+        this.lbPrev = this.lightbox.querySelector("[data-lb-prev]");
+        this.lbNext = this.lightbox.querySelector("[data-lb-next]");
+        this.lbClose = this.lightbox.querySelector("[data-close]");
+      }
 
       this.showButtons();
       this.bindEvents();
@@ -157,7 +160,8 @@ for (let i = 0; i < galleryCount; i++) {
       if (index < 0) index = this.total - 1;
       if (index >= this.total) index = 0;
       this.current = index;
-      this.track.style.transform = `translateX(-${this.current * 100}%)`;
+      const slideW = this.track.parentElement!.offsetWidth;
+      this.track.style.transform = `translateX(${-this.current * slideW}px)`;
       this.dots.forEach((d, i) => {
         d.className = `h-1.5 rounded-full transition-all duration-300 ${i === this.current ? "w-4 bg-white/80" : "w-1.5 bg-white/40"}`;
       });
