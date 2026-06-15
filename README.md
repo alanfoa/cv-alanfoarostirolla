@@ -14,6 +14,16 @@
 
 ---
 
+![Astro](https://img.shields.io/badge/Astro-BC52EE?logo=astro&logoColor=fff)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwindcss&logoColor=fff)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=fff)
+![Netlify](https://img.shields.io/badge/Netlify-00C7B7?logo=netlify&logoColor=fff)
+
+[![VER DEMO](https://img.shields.io/badge/VER_DEMO_EN_VIVO-000000?style=for-the-badge&logo=netlify&logoColor=white)](https://cv-alanfoarostirolla.netlify.app)
+
+---
+
 ## 🧑‍💻 Sobre el proyecto
 
 CV profesional interactivo desarrollado con **Astro 5** + **Tailwind CSS v4**. Diseñado para ser rápido, liviano (cero JS al cliente por defecto) y visualmente atractivo, con animaciones fluidas y un selector de temas de color integrado.
@@ -97,7 +107,6 @@ cv-alanfoarostirolla/
 │   │   └── index.astro      # Página única
 │   └── styles/
 │       └── global.css       # Tema, animaciones, utilidades
-├── plan.md                  # Sprint checklist del proyecto
 ├── astro.config.mjs
 ├── tsconfig.json
 └── package.json
@@ -125,6 +134,7 @@ cv-alanfoarostirolla/
 | **LinkedIn** | https://www.linkedin.com/in/alan-foa-rostirolla-04b97a258 |
 | **GitHub** | https://github.com/AlanFoa |
 | **Email** | alan.fr2008@hotmail.com |
+| **CV Online** | https://cv-alanfoarostirolla.netlify.app |
 | **Animelandia** | https://animelandia-oficial.netlify.app |
 | **San Jorge** | https://sanjorgeinformatica.netlify.app |
 | **TurniX** | https://turnix-oficial.netlify.app |
