@@ -69,7 +69,7 @@ export interface Project {
   tags: string[];
   highlights: string[];
   link?: string;
-  image?: string;
+  galleryCount: number;
 }
 
 export const projects: Project[] = [
@@ -87,6 +87,7 @@ export const projects: Project[] = [
       "Notificaciones en tiempo real vía SSE con campana de badges no leídas, Sonner toasts y Desktop Notifications en segundo plano",
     ],
     link: "https://turnix-oficial.netlify.app",
+    galleryCount: 9,
   },
   {
     title: "Animelandia",
@@ -102,6 +103,7 @@ export const projects: Project[] = [
       "Reproductor de video con selección multiservidor extraída mediante regex sobre scripts embebidos del sitio origen",
     ],
     link: "https://animelandia-oficial.netlify.app/",
+    galleryCount: 7,
   },
   {
     title: "San Jorge Informática",
@@ -117,6 +119,7 @@ export const projects: Project[] = [
       "Panel administrador con CRUD de productos, sincronización automatizada desde proveedor externo (Invid) y gestión de categorías",
     ],
     link: "https://sanjorgeinformatica.netlify.app/",
+    galleryCount: 8,
   },
 ];
 

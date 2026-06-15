@@ -1,0 +1,227 @@
+---
+interface Props {
+  slug: string;
+  galleryCount: number;
+  title: string;
+}
+
+const { slug, galleryCount, title } = Astro.props;
+const images: string[] = [];
+
+for (let i = 0; i < galleryCount; i++) {
+  images.push(i === 0 ? `/proyectos/${slug}.png` : `/proyectos/${slug}-${i}.png`);
+}
+---
+
+<div class="carousel-root relative" data-carousel>
+  <div class="relative h-48 overflow-hidden">
+    <div
+      class="carousel-track flex h-full transition-transform duration-500 ease-out"
+      data-track
+    >
+      {images.map((src, i) => (
+        <div class="carousel-slide relative min-w-full shrink-0 cursor-pointer" data-slide={i}>
+          <img
+            src={src}
+            alt={`${title} - ${i + 1}`}
+            class="h-full w-full object-cover opacity-50 transition-all duration-500 hover:opacity-100"
+            loading={i === 0 ? "eager" : "lazy"}
+          />
+        </div>
+      ))}
+    </div>
+
+    {galleryCount > 1 && (
+      <>
+        <button
+          class="carousel-btn absolute left-2 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-sm transition-all duration-300 hover:bg-black/70 group-hover:opacity-100"
+          data-prev
+          aria-label="Anterior"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button
+          class="carousel-btn absolute right-2 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-sm transition-all duration-300 hover:bg-black/70 group-hover:opacity-100"
+          data-next
+          aria-label="Siguiente"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <div class="absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
+          {images.map((_, i) => (
+            <button
+              class="h-1.5 w-1.5 rounded-full bg-white/40 transition-all duration-300"
+              class:list={{ "w-4 bg-white/80": i === 0 }}
+              data-dot={i}
+              aria-label={`Ir a imagen ${i + 1}`}
+            />
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+
+  {galleryCount > 1 && (
+    <div
+      class="lightbox fixed inset-0 z-50 hidden items-center justify-center bg-black/90 backdrop-blur-sm"
+      data-lightbox
+      role="dialog"
+      aria-label="Visor de imágenes"
+    >
+      <button
+        class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+        data-close
+        aria-label="Cerrar"
+      >
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <button class="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20" data-lb-prev aria-label="Anterior">
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20" data-lb-next aria-label="Siguiente">
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <div class="flex max-h-[90vh] max-w-[90vw] items-center justify-center">
+        {images.map((src, i) => (
+          <img
+            src={src}
+            alt={`${title} - ${i + 1}`}
+            class="lightbox-img absolute max-h-[85vh] max-w-[85vw] rounded-lg object-contain opacity-0 transition-opacity duration-300"
+            class:list={{ "opacity-100": i === 0 }}
+            data-lb-img={i}
+          />
+        ))}
+      </div>
+      <div class="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+        {images.map((_, i) => (
+          <button
+            class="h-2 w-2 rounded-full bg-white/40 transition-all duration-300"
+            class:list={{ "w-6 bg-white/80": i === 0 }}
+            data-lb-dot={i}
+            aria-label={`Ir a imagen ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+
+<script>
+  class CarouselController {
+    private root: HTMLElement;
+    private track: HTMLElement;
+    private slides: HTMLElement[];
+    private dots: HTMLButtonElement[];
+    private prevBtn: HTMLButtonElement | null;
+    private nextBtn: HTMLButtonElement | null;
+    private current = 0;
+    private total: number;
+
+    private lightbox: HTMLElement | null;
+    private lbImgs: HTMLImageElement[];
+    private lbDots: HTMLButtonElement[];
+    private lbPrev: HTMLButtonElement | null;
+    private lbNext: HTMLButtonElement | null;
+    private lbClose: HTMLButtonElement | null;
+    private lbOpen = false;
+
+    constructor(el: HTMLElement) {
+      this.root = el;
+      this.track = el.querySelector("[data-track]")!;
+      this.slides = [...el.querySelectorAll("[data-slide]")];
+      this.dots = [...el.querySelectorAll("[data-dot]")];
+      this.prevBtn = el.querySelector("[data-prev]");
+      this.nextBtn = el.querySelector("[data-next]");
+      this.total = this.slides.length;
+
+      this.lightbox = el.querySelector("[data-lightbox]");
+      this.lbImgs = this.lightbox ? [...this.lightbox.querySelectorAll("[data-lb-img]")] : [];
+      this.lbDots = this.lightbox ? [...this.lightbox.querySelectorAll("[data-lb-dot]")] : [];
+      this.lbPrev = this.lightbox ? this.lightbox.querySelector("[data-lb-prev]") : null;
+      this.lbNext = this.lightbox ? this.lightbox.querySelector("[data-lb-next]") : null;
+      this.lbClose = this.lightbox ? this.lightbox.querySelector("[data-close]") : null;
+
+      this.showButtons();
+      this.bindEvents();
+
+      if (this.lightbox) this.bindLightbox();
+    }
+
+    private showButtons() {
+      if (this.total <= 1) return;
+      const overflowEl = this.root.querySelector(".overflow-hidden");
+      overflowEl?.classList.add("group");
+    }
+
+    private goTo(index: number) {
+      if (index < 0) index = this.total - 1;
+      if (index >= this.total) index = 0;
+      this.current = index;
+      this.track.style.transform = `translateX(-${this.current * 100}%)`;
+      this.dots.forEach((d, i) => {
+        d.className = `h-1.5 rounded-full transition-all duration-300 ${i === this.current ? "w-4 bg-white/80" : "w-1.5 bg-white/40"}`;
+      });
+    }
+
+    private bindEvents() {
+      this.prevBtn?.addEventListener("click", (e) => { e.stopPropagation(); this.goTo(this.current - 1); });
+      this.nextBtn?.addEventListener("click", (e) => { e.stopPropagation(); this.goTo(this.current + 1); });
+      this.dots.forEach((dot, i) => {
+        dot.addEventListener("click", (e) => { e.stopPropagation(); this.goTo(i); });
+      });
+      this.slides.forEach((slide, i) => {
+        slide.addEventListener("click", () => this.openLightbox(i));
+      });
+    }
+
+    private openLightbox(index: number) {
+      if (!this.lightbox) return;
+      this.lbOpen = true;
+      this.lightbox.classList.remove("hidden");
+      this.lightbox.classList.add("flex");
+      document.body.style.overflow = "hidden";
+      this.lbGoTo(index);
+    }
+
+    private closeLightbox() {
+      if (!this.lightbox) return;
+      this.lbOpen = false;
+      this.lightbox.classList.add("hidden");
+      this.lightbox.classList.remove("flex");
+      document.body.style.overflow = "";
+    }
+
+    private lbGoTo(index: number) {
+      if (index < 0) index = this.total - 1;
+      if (index >= this.total) index = 0;
+      this.current = index;
+      this.lbImgs.forEach((img, i) => {
+        img.classList.toggle("opacity-100", i === index);
+        img.classList.toggle("opacity-0", i !== index);
+      });
+      this.lbDots.forEach((d, i) => {
+        d.className = `h-2 rounded-full transition-all duration-300 ${i === this.current ? "w-6 bg-white/80" : "w-2 bg-white/40"}`;
+      });
+    }
+
+    private bindLightbox() {
+      this.lbClose?.addEventListener("click", () => this.closeLightbox());
+      this.lightbox?.addEventListener("click", (e) => {
+        if (e.target === this.lightbox) this.closeLightbox();
+      });
+      this.lbPrev?.addEventListener("click", () => this.lbGoTo(this.current - 1));
+      this.lbNext?.addEventListener("click", () => this.lbGoTo(this.current + 1));
+      this.lbDots.forEach((dot, i) => {
+        dot.addEventListener("click", () => this.lbGoTo(i));
+      });
+      document.addEventListener("keydown", (e) => {
+        if (!this.lbOpen) return;
+        if (e.key === "Escape") this.closeLightbox();
+        if (e.key === "ArrowLeft") this.lbGoTo(this.current - 1);
+        if (e.key === "ArrowRight") this.lbGoTo(this.current + 1);
+      });
+    }
+  }
+
+  document.querySelectorAll("[data-carousel]").forEach((el) => new CarouselController(el as HTMLElement));
+</script>
