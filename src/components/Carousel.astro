@@ -20,7 +20,7 @@ for (let i = 0; i < galleryCount; i++) {
       data-track
     >
       {images.map((src, i) => (
-        <div class="carousel-slide relative min-w-full shrink-0 cursor-pointer" data-slide={i}>
+        <div class="carousel-slide relative flex-none w-full cursor-pointer" data-slide={i}>
           <img
             src={src}
             alt={`${title} - ${i + 1}`}

@@ -90,22 +90,6 @@ export const projects: Project[] = [
     galleryCount: 9,
   },
   {
-    title: "Animelandia",
-    subtitle: "Plataforma de Streaming de Anime",
-    description: [
-      "Motor de streaming de anime con scraping automatizado y frontend vanilla.",
-    ],
-    tags: ["Node.js", "Express", "Axios", "Cheerio", "CSS3", "JavaScript Vanilla", "Docker"],
-    highlights: [
-      "Backend con scraping en tiempo real usando Axios + Cheerio con sistema de caché en memoria y Promise deduplication",
-      "Frontend HTML/CSS/JS puro con variables CSS nativas para theming claro/oscuro y localStorage para favoritos",
-      "Catálogo con 6 filtros interconectados (género, tipo, estado, año, orden, alfabético) y paginación sliding window",
-      "Reproductor de video con selección multiservidor extraída mediante regex sobre scripts embebidos del sitio origen",
-    ],
-    link: "https://animelandia-oficial.netlify.app/",
-    galleryCount: 7,
-  },
-  {
     title: "San Jorge Informática",
     subtitle: "E-commerce & Cotizador de Hardware",
     description: [
@@ -120,6 +104,22 @@ export const projects: Project[] = [
     ],
     link: "https://sanjorgeinformatica.netlify.app/",
     galleryCount: 8,
+  },
+  {
+    title: "Animelandia",
+    subtitle: "Plataforma de Streaming de Anime",
+    description: [
+      "Motor de streaming de anime con scraping automatizado y frontend vanilla.",
+    ],
+    tags: ["Node.js", "Express", "Axios", "Cheerio", "CSS3", "JavaScript Vanilla", "Docker"],
+    highlights: [
+      "Backend con scraping en tiempo real usando Axios + Cheerio con sistema de caché en memoria y Promise deduplication",
+      "Frontend HTML/CSS/JS puro con variables CSS nativas para theming claro/oscuro y localStorage para favoritos",
+      "Catálogo con 6 filtros interconectados (género, tipo, estado, año, orden, alfabético) y paginación sliding window",
+      "Reproductor de video con selección multiservidor extraída mediante regex sobre scripts embebidos del sitio origen",
+    ],
+    link: "https://animelandia-oficial.netlify.app/",
+    galleryCount: 7,
   },
 ];
 
