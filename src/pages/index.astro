@@ -1,0 +1,86 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import Hero from "../components/Hero.astro";
+import About from "../components/About.astro";
+import Stack from "../components/Stack.astro";
+import Projects from "../components/Projects.astro";
+import Experience from "../components/Experience.astro";
+import Education from "../components/Education.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout>
+  <Navbar />
+  <Hero />
+  <About />
+  <Stack />
+  <Projects />
+  <Experience />
+  <Education />
+  <Footer />
+
+  <div id="theme-switcher" class="fixed bottom-6 right-6 z-50">
+    <button
+      id="theme-btn"
+      class="card-glass flex items-center gap-2 rounded-full px-4 py-2 text-sm text-gray-300 transition-all duration-300 hover:glow-primary hover:text-white"
+      title="Cambiar tema de color"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      <span id="theme-label">Tema</span>
+    </button>
+  </div>
+</Layout>
+
+<script>
+  const themes = [
+    { name: "Menta", className: "theme-menta" },
+    { name: "Neón", className: "theme-neon" },
+    { name: "Esmeralda", className: "theme-esmeralda" },
+    { name: "Azul", className: "theme-azul" },
+    { name: "Coral", className: "theme-coral" },
+    { name: "Ámbar", className: "theme-ambar" },
+  ];
+
+  let currentTheme = -1;
+  const btn = document.getElementById("theme-btn");
+  const label = document.getElementById("theme-label");
+
+  if (btn && label) {
+    label.textContent = "Menta";
+    btn.addEventListener("click", () => {
+      if (currentTheme >= 0) {
+        document.body.classList.remove(themes[currentTheme].className);
+      }
+      currentTheme = (currentTheme + 1) % themes.length;
+      document.body.classList.add(themes[currentTheme].className);
+      label.textContent = themes[currentTheme].name;
+    });
+  }
+
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+  );
+
+  document.querySelectorAll(".reveal").forEach((el) => {
+    revealObserver.observe(el);
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", (e) => {
+      e.preventDefault();
+      const target = document.querySelector(anchor.getAttribute("href"));
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  });
+</script>

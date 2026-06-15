@@ -1,0 +1,31 @@
+---
+import { stack } from "../data/info";
+
+const categories = Object.entries(stack);
+---
+
+<section id="stack" class="section reveal mx-auto max-w-5xl px-4 py-28">
+  <h2 class="mb-14 text-center text-3xl font-bold text-white max-md:text-2xl">
+    Stack <span class="text-gradient">Tecnológico</span>
+  </h2>
+
+  <div class="grid gap-8 md:grid-cols-2">
+    {categories.map(([category, items], catIdx) => (
+      <div
+        class="card-glass reveal rounded-2xl p-6 transition-all duration-300 hover:glow-secondary"
+        class:list={[`stagger-${(catIdx % 6) + 1}`]}
+      >
+        <h3 class="mb-4 text-lg font-semibold text-primary">{category}</h3>
+        <div class="flex flex-wrap gap-2">
+          {items.map((tech) => (
+            <span
+              class="reveal inline-block rounded-full border border-dark-border bg-dark-bg px-3.5 py-1.5 text-sm font-medium text-gray-300 transition-all duration-300 hover:scale-110 hover:border-secondary/50 hover:text-white hover:glow-secondary"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
